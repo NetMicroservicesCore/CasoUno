@@ -1,0 +1,143 @@
+﻿@model CasoUno.Principal.Front.ViewModels.RegisterVM
+@{
+    ViewBag.Title = "Registro";
+    Layout = null;
+}
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Registro por Pasos</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="~/Content/site-register.css" rel="stylesheet" />
+<div class="wizard-card p-4">
+    <h3 class="text-center fw-bold mb-3">Crear Cuenta</h3>
+
+    <!-- Barra de progreso -->
+    <div class="progress mb-4">
+        <div id="progressBar" class="progress-bar" role="progressbar" style="width: 33%;"></div>
+    </div>
+
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "needs-validation", novalidate = "novalidate", id = "registerForm" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <!-- PASO 1 -->
+        <div class="step active" id="step1">
+            <h5 class="fw-semibold mb-3">Información Personal</h5>
+
+            <div class="mb-3">
+                @Html.LabelFor(x => x.DisplayName, new { @class = "form-label fw-semibold" })
+                @Html.TextBoxFor(x => x.DisplayName, new { @class = "form-control", required = "required", placeholder = "Tu nombre visible" })
+                <div class="invalid-feedback">Este campo es obligatorio.</div>
+            </div>
+
+            <button type="button" class="btn btn-primary w-100" onclick="nextStep(1)">Siguiente</button>
+        </div>
+
+        <!-- PASO 2 -->
+        <div class="step" id="step2">
+            <h5 class="fw-semibold mb-3">Datos de Contacto</h5>
+
+            <div class="mb-3">
+                @Html.LabelFor(x => x.Email, new { @class = "form-label fw-semibold" })
+                @Html.TextBoxFor(x => x.Email, new { @class = "form-control", type = "email", required = "required", placeholder = "correo@ejemplo.com" })
+                <div class="invalid-feedback">Ingresa un correo válido.</div>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <button type="button" class="btn btn-secondary" onclick="prevStep(2)">Atrás</button>
+                <button type="button" class="btn btn-primary" onclick="nextStep(2)">Siguiente</button>
+            </div>
+        </div>
+
+        <!-- PASO 3 -->
+        <div class="step" id="step3">
+            <h5 class="fw-semibold mb-3">Seguridad</h5>
+
+            <div class="mb-3">
+                @Html.LabelFor(x => x.Password, new { @class = "form-label fw-semibold" })
+                @Html.PasswordFor(x => x.Password, new { @class = "form-control", required = "required", minlength = "6", placeholder = "Mínimo 6 caracteres" })
+                <div class="invalid-feedback">La contraseña es obligatoria y debe tener al menos 6 caracteres.</div>
+            </div>
+
+            <div class="mb-3">
+                @Html.LabelFor(x => x.ConfirmPassword, new { @class = "form-label fw-semibold" })
+                @Html.PasswordFor(x => x.ConfirmPassword, new { @class = "form-control", required = "required", placeholder = "Repite tu contraseña" })
+                <div class="invalid-feedback">Las contraseñas deben coincidir.</div>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <button type="button" class="btn btn-secondary" onclick="prevStep(3)">Atrás</button>
+
+                <button id="btnRegister" class="btn btn-success" type="submit">
+                    <span id="btnText">Registrar</span>
+                    <span id="btnSpinner" class="spinner-border spinner-border-sm d-none"></span>
+                </button>
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+    let currentStep = 1;
+
+    function nextStep(step) {
+        const form = document.getElementById("registerForm");
+        const inputs = document.querySelectorAll(`#step${step} input`);
+
+        // Validación del paso actual
+        let valid = true;
+        inputs.forEach(input => {
+            if (!input.checkValidity()) {
+                valid = false;
+            }
+        });
+
+        if (!valid) {
+            form.classList.add("was-validated");
+            return;
+        }
+
+        // Cambiar paso
+        document.getElementById(`step${step}`).classList.remove("active");
+        document.getElementById(`step${step + 1}`).classList.add("active");
+
+        currentStep++;
+        updateProgress();
+    }
+
+    function prevStep(step) {
+        document.getElementById(`step${step}`).classList.remove("active");
+        document.getElementById(`step${step - 1}`).classList.add("active");
+
+        currentStep--;
+        updateProgress();
+    }
+
+    function updateProgress() {
+        const progress = (currentStep / 3) * 100;
+        document.getElementById("progressBar").style.width = progress + "%";
+    }
+
+    // Loading del botón final
+    const form = document.getElementById("registerForm");
+    const btn = document.getElementById("btnRegister");
+    const btnText = document.getElementById("btnText");
+    const btnSpinner = document.getElementById("btnSpinner");
+
+    form.addEventListener("submit", function (e) {
+        if (!form.checkValidity()) {
+            e.preventDefault();
+            e.stopPropagation();
+        } else {
+            btn.classList.add("btn-loading");
+            btnText.textContent = "Procesando...";
+            btnSpinner.classList.remove("d-none");
+        }
+
+        form.classList.add("was-validated");
+    });
+</script>
+<script src="~/Scripts/bootstrap.bundle.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+

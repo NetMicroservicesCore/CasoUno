@@ -1,0 +1,68 @@
+﻿@model CasoUno.Principal.Front.ViewModels.LoginVM
+@{
+    ViewData["Title"] = "Login de Acceso";
+    Layout = null;
+}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login de Acceso</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/login-principal.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div class="card login-card p-4">
+        <h4 class="text-center mb-3 fw-bold">Iniciar Sesión</h4>
+        <form method="post" id="loginForm" novalidate>
+            <div class="mb-3">
+                @Html.LabelFor(m => m.UserName, new { @class = "form-label" })
+                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", required = "required", placeholder = "Ingrese su nombre de usuario" })
+                @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="mb-3">
+                @Html.LabelFor(m => m.Password, new { @class = "form-label" })
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control form-control-sm", required = "required", type = "password" })
+                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="form-check mb-3">
+                @Html.CheckBoxFor(m => m.RememberMe, new { @class = "form-check-input" })
+                @Html.LabelFor(m => m.RememberMe, new { @class = "form-check-label" })
+            </div>
+            <button id="btnLogin" class="btn btn-primary w-100" type="submit">
+                <span id="btnText">Ingresar</span>
+                <span id="btnSpinner" class="spinner-border spinner-border-sm d-none"></span>
+            </button>
+
+        </form>
+    </div>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/bootstrap.bundle.js"></script>
+    <script>
+        const form = document.getElementById("loginForm");
+        const btn = document.getElementById("btnLogin");
+        const btnText = document.getElementById("btnText");
+        const btnSpinner = document.getElementById("btnSpinner");
+
+
+        form.addEventListener("submit", function (e) {
+
+            if (!form.checkValidity()) {
+                e.preventDefault();
+                form.classList.add("was-validated");
+                return;
+            }
+            btn.classList.add("btn-loading");
+            btnText.textContent = "Cargando...";
+            btnSpinner.classList.remove("d-none");
+        });
+
+    </script>
+
+</body>
+</html>
