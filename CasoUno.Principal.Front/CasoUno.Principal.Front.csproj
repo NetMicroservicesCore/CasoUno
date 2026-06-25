@@ -147,6 +147,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Content\site-register.css" />
     <Content Include="Global.asax" />
+    <Content Include="Images\avatar.jpeg" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
