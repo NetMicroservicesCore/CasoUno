@@ -163,6 +163,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202606251901548_InicializacionV1_DB.cs" />
+    <Compile Include="Migrations\202606251901548_InicializacionV1_DB.Designer.cs">
+      <DependentUpon>202606251901548_InicializacionV1_DB.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Contexto\ApplicationDbContext.cs" />
     <Compile Include="Models\Contexto\ApplicationSignInManager.cs" />
     <Compile Include="Models\Contexto\ApplicationUser.cs" />
@@ -212,6 +217,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202606251901548_InicializacionV1_DB.resx">
+      <DependentUpon>202606251901548_InicializacionV1_DB.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
